@@ -62,6 +62,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -438,6 +439,7 @@ public class MITREidDataService_1_1 extends MITREidDataService_1_X {
      * @see org.mitre.openid.connect.service.MITREidDataService#importData(com.google.gson.stream.JsonReader)
      */
     @Override
+    @Transactional
     public void importData(JsonReader reader) throws IOException {
 
         logger.info("Reading configuration for 1.0");
