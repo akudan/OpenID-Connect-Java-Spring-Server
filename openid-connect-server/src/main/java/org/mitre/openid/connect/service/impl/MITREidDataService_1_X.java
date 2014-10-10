@@ -27,14 +27,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import org.mitre.openid.connect.service.MITREidDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,32 +41,11 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class MITREidDataService_1_X implements MITREidDataService {
 	private static Logger logger = LoggerFactory.getLogger(MITREidDataService_1_X.class);
-    private static final String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    private static final TimeZone utc = TimeZone.getTimeZone("UTC");
-    private static final SimpleDateFormat sdf = new SimpleDateFormat(ISO_FORMAT);
-    
-    protected static String toUTCString(Date date) {
-        if (date == null) {
-            return null;
-        }
-        sdf.setTimeZone(utc);
-        return sdf.format(date);
-    }
-    
-    protected static Date utcToDate(String s) {
-        if (s == null) {
-            return null;
-        }
-        Date d = null;
-        try {
-            d = sdf.parse(s);
-        } catch(ParseException ex) {
-            logger.error("Unable to parse date string {}", s, ex);
-        }
-        return d;
-    }
     
     protected static <T> T base64UrlDecodeObject(String encoded, Class<T> type) {
+        if(encoded == null || encoded.isEmpty()) {
+            return null;
+        }
         T deserialized = null;
         try {
             byte[] decoded = BaseEncoding.base64Url().decode(encoded);

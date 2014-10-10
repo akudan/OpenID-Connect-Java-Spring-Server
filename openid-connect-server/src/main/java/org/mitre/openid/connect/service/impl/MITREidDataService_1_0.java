@@ -61,7 +61,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.mitre.openid.connect.util.DateUtil;
 /**
  *
  * Data service to import and export MITREid 1.0 configuration.
@@ -174,7 +174,7 @@ public class MITREidDataService_1_0 extends MITREidDataService_1_X {
                         } else if (name.equals("id")) {
                             currentId = reader.nextLong();
                         } else if (name.equals("expiration")) {
-                            Date date = utcToDate(reader.nextString());
+                            Date date = DateUtil.utcToDate(reader.nextString());
                             token.setExpiration(date);
                         } else if (name.equals("value")) {
                             String value = reader.nextString();
@@ -243,7 +243,7 @@ public class MITREidDataService_1_0 extends MITREidDataService_1_X {
                         } else if (name.equals("id")) {
                             currentId = reader.nextLong();
                         } else if (name.equals("expiration")) {
-                            Date date = utcToDate(reader.nextString());
+                            Date date = DateUtil.utcToDate(reader.nextString());
                             token.setExpiration(date);
                         } else if (name.equals("value")) {
                             String value = reader.nextString();
@@ -452,15 +452,15 @@ public class MITREidDataService_1_0 extends MITREidDataService_1_X {
                         } else if (name.equals("id")) {
                             currentId = reader.nextLong();
                         } else if (name.equals("accessDate")) {
-                            Date date = utcToDate(reader.nextString());
+                            Date date = DateUtil.utcToDate(reader.nextString());
                             site.setAccessDate(date);
                         } else if (name.equals("clientId")) {
                             site.setClientId(reader.nextString());
                         } else if (name.equals("creationDate")) {
-                            Date date = utcToDate(reader.nextString());
+                            Date date = DateUtil.utcToDate(reader.nextString());
                             site.setCreationDate(date);
                         } else if (name.equals("timeoutDate")) {
-                            Date date = utcToDate(reader.nextString());
+                            Date date = DateUtil.utcToDate(reader.nextString());
                             site.setTimeoutDate(date);
                         } else if (name.equals("userId")) {
                             site.setUserId(reader.nextString());
@@ -821,6 +821,7 @@ public class MITREidDataService_1_0 extends MITREidDataService_1_X {
             approvedSiteRepository.save(approvedSite);
         }
         grantToWhitelistedSiteRefs.clear();
+        whitelistedSiteOldToNewIdMap.clear();
         for (Long oldGrantId : grantToAccessTokensRefs.keySet()) {
             Set<Long> oldAccessTokenIds = grantToAccessTokensRefs.get(oldGrantId);
             Set<OAuth2AccessTokenEntity> tokens = new HashSet<OAuth2AccessTokenEntity>();
